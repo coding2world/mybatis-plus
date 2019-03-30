@@ -224,4 +224,13 @@ public class Page<T> implements IPage<T> {
         this.optimizeCountSql = optimizeCountSql;
         return this;
     }
+
+    public  <T, R> Page<R> pageMap(Function<T, R> converter) {
+        var newPage = new Page<R>(this.getCurrent(), this.getSize(), this.getTotal());
+        newPage.setRecords(this.getRecords()
+            .stream()
+            .map(converter)
+            .collect(Collectors.toList()));
+        return newPage;
+    }
 }
